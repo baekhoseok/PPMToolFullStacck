@@ -28,9 +28,9 @@ public class Project {
     @NotBlank(message = "Project Description is required")
     private String description;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate startDateTime;
+    private LocalDate start_date;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate endDateTime;
+    private LocalDate end_date;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createdAt;
