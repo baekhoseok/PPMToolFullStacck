@@ -22,7 +22,7 @@ public class ProjectValidator implements Validator {
     public void validate(Object o, Errors errors) {
         Project project = (Project)o;
         if (projectRepository.existsByProjectIdentifier(project.getProjectIdentifier())) {
-            errors.rejectValue("projectName","invalid.projectIdentifier","ProjectIdentifier is already exists");
+            errors.rejectValue("projectIdentifier","invalid.projectIdentifier","ProjectIdentifier is already exists");
         }
     }
 }

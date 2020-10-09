@@ -2,12 +2,14 @@ package me.hoseok.ppmtool.web;
 
 import lombok.RequiredArgsConstructor;
 import me.hoseok.ppmtool.domain.Project;
+import me.hoseok.ppmtool.exceptions.ProjectIdException;
 import me.hoseok.ppmtool.service.MapValidationErrorsService;
 import me.hoseok.ppmtool.service.ProjectService;
 import me.hoseok.ppmtool.validator.ProjectValidator;
 import org.apache.catalina.LifecycleState;
 import org.apache.coyote.Response;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -34,13 +36,11 @@ public class ProjectController {
 //    }
 
     @PostMapping("/project")
-    public ResponseEntity createNewProject(@Valid @RequestBody Project project, Errors errors){
+    public ResponseEntity createNewProject(@Valid @RequestBody Project project, Errors errors) throws DataIntegrityViolationException {
 
         ResponseEntity<?> errorMap = mapValidationErrorsService.MapValidationErrorsService(errors);
         if(errorMap!=null)return errorMap;
-
         Project newProject = projectService.createOrUpdate(project);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(newProject);
     }
 

@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { createProject } from "../../actions/projectActions";
+import { getProject, createProject } from "../../actions/projectActions";
 import classnames from "classnames";
 
-export class AddProject extends Component {
+export class UpdateProject extends Component {
   constructor() {
     super();
 
     this.state = {
+      id: "",
       projectName: "",
       projectIdentifier: "",
       description: "",
@@ -21,7 +22,30 @@ export class AddProject extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidMount() {
+    const { id } = this.props.match.params;
+    this.props.getProject(id, this.props.history);
+  }
+
   componentWillReceiveProps(nextProps) {
+    if (nextProps.project) {
+      const {
+        id,
+        projectName,
+        projectIdentifier,
+        description,
+        start_date,
+        end_date,
+      } = nextProps.project;
+      this.setState({
+        id,
+        projectName,
+        projectIdentifier,
+        description,
+        start_date,
+        end_date,
+      });
+    }
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
@@ -33,7 +57,8 @@ export class AddProject extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    const newProject = {
+    const updateProject = {
+      id: this.state.id,
       projectName: this.state.projectName,
       projectIdentifier: this.state.projectIdentifier,
       description: this.state.description,
@@ -41,12 +66,12 @@ export class AddProject extends Component {
       end_date: this.state.end_date,
     };
 
-    this.props.createProject(newProject, this.props.history);
+    console.log(updateProject);
+    this.props.createProject(updateProject, this.props.history);
   }
 
   render() {
     const { errors } = this.state;
-
     return (
       <div>
         <div className="project">
@@ -84,6 +109,7 @@ export class AddProject extends Component {
                       name="projectIdentifier"
                       value={this.state.projectIdentifier}
                       onChange={this.onChange}
+                      disabled
                     />
                     {errors.projectName && (
                       <div className="invalid-feedback">
@@ -144,13 +170,18 @@ export class AddProject extends Component {
   }
 }
 
-AddProject.propTypes = {
+UpdateProject.propTypes = {
+  getProject: PropTypes.func.isRequired,
   createProject: PropTypes.func.isRequired,
+  project: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  project: state.project.project,
   errors: state.errors,
 });
 
-export default connect(mapStateToProps, { createProject })(AddProject);
+export default connect(mapStateToProps, { getProject, createProject })(
+  UpdateProject
+);
