@@ -1,6 +1,7 @@
 package me.hoseok.ppmtool.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +30,10 @@ public class Project {
     private String projectIdentifier;
     @NotBlank(message = "Project Description is required")
     private String description;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
+    private Backlog backlog;
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate start_date;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
