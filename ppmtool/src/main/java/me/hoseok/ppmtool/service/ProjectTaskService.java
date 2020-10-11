@@ -79,12 +79,6 @@ public class ProjectTaskService {
 
     public void deleteProjectTask(String backlog_id, String pt_id) {
         ProjectTask projectTask = getProjectTask(backlog_id, pt_id);
-
-
-//        Backlog backlog = projectTask.getBacklog();
-//        List<ProjectTask> projectTasks = backlog.getProjectTask();
-//        projectTasks.remove(projectTask);
-//        backlogRepository.save(backlog);
         projectTaskRepository.delete(projectTask);
     }
 }
